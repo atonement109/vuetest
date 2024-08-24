@@ -1,26 +1,47 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <HeaderAce></HeaderAce>
+    <p v-if="msg.length > 0">
+      {{msg}}
+    </p>
+
+    <p v-else>
+      no text
+    </p>
+    <input type="text" v-model="msg">
+    <button @click="clear()">clear</button>
+  </div>
 </template>
 
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderAce from './components/HeaderAce.vue'
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    HeaderAce
+  },
+  data () {
+    return {
+      msg: 'Hello World!'
+    }
+  },
+  methods: {
+    clear () {
+      this.msg = ''
+    }
+  },
+  created () {
+    fetch('https://fakestoreapi.com/products/1')
+    .then( response => {
+      return response.json()
+    })
+    .then( json => {
+      this.msg = json.title
+    })
+    .catch( (err) => {
+      this.msg = err // エラー処理
+    });
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
